@@ -12,6 +12,7 @@ lazy val dominio = Project(
 lazy val aplicacion = Project(
   id = "aplicacion",
   base = file("aplicacion"))
+  .dependsOn(dominio)
 
 lazy val infraestructura = Project(
   id = "infraestructura",
