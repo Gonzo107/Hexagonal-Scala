@@ -11,4 +11,5 @@ trait UsuarioRepository {
   def getById(id: Usuario.IdUsuario): Option[Usuario]
 
   def delete(id: Usuario.IdUsuario): Try[Usuario]
+
 }
