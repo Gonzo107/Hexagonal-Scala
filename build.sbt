@@ -11,12 +11,13 @@ lazy val root = Project(
   .dependsOn(
     dominio,
     aplicacion,
-    infraestructura)
+    apiRest)
   .aggregate(
     dominio,
     aplicacion,
-    infraestructura
+    apiRest
   )
+
 lazy val dominio = Project(
   id = "dominio",
   base = file("dominio"))
@@ -33,3 +34,27 @@ lazy val aplicacion = Project(
 lazy val infraestructura = Project(
   id = "infraestructura",
   base = file("infraestructura"))
+  .dependsOn(driver, driven)
+  .aggregate(driver, driven)
+
+lazy val driver = Project(
+  id = "driver",
+  base = file("infraestructura/driver"))
+  .dependsOn(apiRest)
+  .aggregate(apiRest)
+
+lazy val driven = Project(
+  id = "driven",
+  base = file("infraestructura/driven"))
+  .dependsOn(persistenciaH2)
+  .aggregate(persistenciaH2)
+
+lazy val persistenciaH2 = Project(
+  id = "persistencia-h2",
+  base = file("infraestructura/driven/persistencia-h2"))
+
+lazy val apiRest = Project(
+  id = "api-rest",
+  base = file("infraestructura/driver/api-rest"))
+  .enablePlugins(PlayService)
+  .dependsOn(aplicacion)
