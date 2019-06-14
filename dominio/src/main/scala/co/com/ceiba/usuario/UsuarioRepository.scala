@@ -1,15 +1,19 @@
 package co.com.ceiba.usuario
 
-import scala.util.Try
+import co.com.ceiba.usuario.Usuario.IdUsuario
+
+import scala.concurrent.Future
 
 trait UsuarioRepository {
 
-  def save(usuario: Usuario): Try[Usuario]
+  def save(usuario: Usuario): Future[Usuario]
 
-  def getAll(): Seq[Usuario]
+  def getAll(): Future[Seq[Usuario]]
 
-  def getById(id: Usuario.IdUsuario): Option[Usuario]
+  def getById(id: Usuario.IdUsuario): Future[Usuario]
 
-  def delete(id: Usuario.IdUsuario): Try[Usuario]
+  def exists(id: Usuario.IdUsuario): Future[Boolean]
+
+  def delete(id: Usuario.IdUsuario): Future[IdUsuario]
 
 }

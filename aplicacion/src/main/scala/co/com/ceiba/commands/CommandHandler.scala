@@ -1,33 +1,29 @@
 package co.com.ceiba.commands
 
-import co.com.ceiba.events.{Event, FalloEvent, OperacionUsuarioEvent}
+import co.com.ceiba.events.{Event, ExitoUsuarioEvent, FalloEvent, UsuarioEliminadoEvent}
 import co.com.ceiba.services.{EliminarUsuarioUseCase, RegistrarUsuarioUseCase}
-import co.com.ceiba.usuario.Usuario
+import com.google.inject.Inject
 
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ExecutionContext, Future}
 
 
-class CommandHandler(registrarUsuarioUseCase: RegistrarUsuarioUseCase, eliminarUsuarioUseCase: EliminarUsuarioUseCase) {
+class CommandHandler @Inject()(registrarUsuarioUseCase: RegistrarUsuarioUseCase, eliminarUsuarioUseCase: EliminarUsuarioUseCase)
+                              (implicit ec: ExecutionContext) {
 
   val COMANDO_NO_SOPORTADO = "Operacion no soportada"
 
-  def manejarComando(comando: Command): Event = {
+  def manejarComando(comando: Command): Future[Event] = {
 
-    comando match {
+    (comando match {
       case RegistrarUsuarioCommand(id, nombre, apellido, email) =>
-        ejecutarOperacionUsuario(() => registrarUsuarioUseCase.registrar(id, nombre, apellido, email))
-      case EliminarUsuarioCommand(id) => ejecutarOperacionUsuario(() => eliminarUsuarioUseCase.eliminar(id))
+        registrarUsuarioUseCase.registrar(id, nombre, apellido, email).map(ExitoUsuarioEvent)
 
-      case _ => FalloEvent(COMANDO_NO_SOPORTADO)
-    }
+      case EliminarUsuarioCommand(id) => eliminarUsuarioUseCase.eliminar(id).map(UsuarioEliminadoEvent)
+
+      case _ => Future(FalloEvent(COMANDO_NO_SOPORTADO))
+    }).recover({
+      case error => FalloEvent(error.getLocalizedMessage)
+    })
   }
 
-  private def ejecutarOperacionUsuario(commandExecutor: () => Try[Usuario]): Event = {
-
-    commandExecutor() match {
-      case Success(usuario) => OperacionUsuarioEvent(usuario)
-      case Failure(exception) => FalloEvent(exception.getLocalizedMessage)
-    }
-
-  }
 }

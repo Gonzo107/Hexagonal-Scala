@@ -3,19 +3,23 @@ ThisBuild / organization := "co.com.ceiba"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "2.12.8"
 
-name := "Hexagonal-Scala-Ceiba"
+name := "Hexagonal-Scala"
 
-lazy val root = Project(
+lazy val bootstrap = Project(
   id = "hexagonal-scala",
   base = file("."))
+  .enablePlugins(PlayScala)
+  .settings(
+    libraryDependencies += guice
+  )
   .dependsOn(
     dominio,
     aplicacion,
-    apiRest)
+    infraestructura)
   .aggregate(
     dominio,
     aplicacion,
-    apiRest
+    infraestructura
   )
 
 lazy val dominio = Project(
@@ -26,6 +30,7 @@ lazy val aplicacion = Project(
   id = "aplicacion",
   base = file("aplicacion"))
   .settings(
+    libraryDependencies += guice,
     libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test,
     libraryDependencies += "org.mockito" % "mockito-core" % "2.28.2" % Test
   )
@@ -52,6 +57,16 @@ lazy val driven = Project(
 lazy val persistenciaH2 = Project(
   id = "persistencia-h2",
   base = file("infraestructura/driven/persistencia-h2"))
+  .enablePlugins(PlayService)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.typesafe.play" %% "play-slick" % "4.0.0",
+      "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0",
+      "com.h2database" % "h2" % "1.4.192",
+      guice
+    )
+  )
+  .dependsOn(dominio)
 
 lazy val apiRest = Project(
   id = "api-rest",

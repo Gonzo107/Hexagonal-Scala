@@ -3,17 +3,18 @@ package co.com.ceiba.services
 import co.com.ceiba.exceptions.NoExisteException
 import co.com.ceiba.usuario.Usuario.IdUsuario
 import co.com.ceiba.usuario.{Usuario, UsuarioRepository}
+import com.google.inject.Inject
 
-import scala.util.{Failure, Try}
+import scala.concurrent.{ExecutionContext, Future}
 
-class EliminarUsuarioService(usuarios: UsuarioRepository) extends EliminarUsuarioUseCase {
+class EliminarUsuarioService  @Inject() (usuarios: UsuarioRepository)(implicit ec: ExecutionContext) extends EliminarUsuarioUseCase {
 
-  override def eliminar(id: IdUsuario): Try[Usuario] = {
+  override def eliminar(id: IdUsuario): Future[Usuario.IdUsuario] = {
 
-    usuarios.getById(id) match {
-      case Some(u) => usuarios.delete(id)
-      case None => Failure(NoExisteException())
-    }
+    usuarios.exists(id).flatMap({
+      case true => usuarios.delete(id)
+      case false => Future.failed(NoExisteException())
+    })
 
   }
 

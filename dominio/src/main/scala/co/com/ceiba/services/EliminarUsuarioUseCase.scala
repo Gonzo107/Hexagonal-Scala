@@ -2,10 +2,10 @@ package co.com.ceiba.services
 
 import co.com.ceiba.usuario.Usuario
 
-import scala.util.Try
+import scala.concurrent.Future
 
 trait EliminarUsuarioUseCase {
 
-  def eliminar(id: Usuario.IdUsuario): Try[Usuario]
+  def eliminar(id: Usuario.IdUsuario): Future[Usuario.IdUsuario]
 
 }
