@@ -1,15 +1,15 @@
 package co.com.ceiba.commands
 
-import co.com.ceiba.events.{FalloEvent, OperacionUsuarioEvent}
+import co.com.ceiba.events.{ExitoUsuarioEvent, FalloEvent, UsuarioEliminadoEvent}
 import co.com.ceiba.services.{EliminarUsuarioUseCase, RegistrarUsuarioUseCase}
 import co.com.ceiba.utils.UsuarioTestProvider
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.{AsyncWordSpec, MustMatchers}
 
-import scala.util.{Failure, Success}
+import scala.concurrent.Future
 
-class CommandHandlerTest extends PlaySpec with MockitoSugar {
+class CommandHandlerTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
   val registarUsuarioUseCase: RegistrarUsuarioUseCase = mock[RegistrarUsuarioUseCase]
   val eliminarUsuarioUseCase: EliminarUsuarioUseCase = mock[EliminarUsuarioUseCase]
@@ -22,7 +22,7 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
 
       val usuario = UsuarioTestProvider.unUsuario()
 
-      when(registarUsuarioUseCase.registrar(usuario.id, usuario.nombre, usuario.apellido, usuario.email)) thenReturn Success(usuario)
+      when(registarUsuarioUseCase.registrar(usuario.id, usuario.nombre, usuario.apellido, usuario.email)) thenReturn Future(usuario)
 
       manejador
         .manejarComando(
@@ -30,7 +30,7 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
             usuario.id,
             usuario.nombre,
             usuario.apellido,
-            usuario.email)) must equal(OperacionUsuarioEvent(usuario))
+            usuario.email)).map(evento => evento must equal(ExitoUsuarioEvent(usuario)))
 
     }
 
@@ -38,12 +38,12 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
 
       val usuario = UsuarioTestProvider.unUsuario()
 
-      when(eliminarUsuarioUseCase.eliminar(usuario.id)) thenReturn Success(usuario)
+      when(eliminarUsuarioUseCase.eliminar(usuario.id)) thenReturn Future(usuario.id)
 
       manejador
         .manejarComando(
           EliminarUsuarioCommand(usuario.id)
-        ) must equal(OperacionUsuarioEvent(usuario))
+        ).map(event => event must equal(UsuarioEliminadoEvent(usuario.id)))
 
     }
 
@@ -54,7 +54,7 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
       manejador
         .manejarComando(
           ComandoTest()
-        ) must equal(FalloEvent(manejador.COMANDO_NO_SOPORTADO))
+        ).map(event => event must equal(FalloEvent(manejador.COMANDO_NO_SOPORTADO)))
 
     }
 
@@ -64,7 +64,7 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
 
       case class ExcepcionTest() extends Exception
 
-      when(registarUsuarioUseCase.registrar(usuario.id, usuario.nombre, usuario.apellido, usuario.email)) thenReturn Failure(ExcepcionTest())
+      when(registarUsuarioUseCase.registrar(usuario.id, usuario.nombre, usuario.apellido, usuario.email)) thenReturn Future.failed(ExcepcionTest())
 
       manejador
         .manejarComando(
@@ -72,7 +72,7 @@ class CommandHandlerTest extends PlaySpec with MockitoSugar {
             usuario.id,
             usuario.nombre,
             usuario.apellido,
-            usuario.email)) must equal(FalloEvent(ExcepcionTest().getLocalizedMessage))
+            usuario.email)).map(event => event must equal(FalloEvent(ExcepcionTest().getLocalizedMessage)))
 
     }
 

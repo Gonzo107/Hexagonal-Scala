@@ -5,11 +5,12 @@ import co.com.ceiba.usuario.UsuarioRepository
 import co.com.ceiba.utils.UsuarioTestProvider
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.{AsyncWordSpec, MustMatchers}
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class EliminarUsuarioServiceTest extends PlaySpec with MockitoSugar {
+class EliminarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
   "EliminarUsuarioService" should {
 
@@ -21,9 +22,9 @@ class EliminarUsuarioServiceTest extends PlaySpec with MockitoSugar {
       val eliminarUsuarioService = new EliminarUsuarioService(repositorioMock)
 
 
-      when(repositorioMock.getById(usuario.id)) thenReturn Some(usuario)
+      when(repositorioMock.exists(usuario.id)) thenReturn Future(true)
 
-      when(repositorioMock.delete(usuario.id)) thenReturn Success(usuario)
+      when(repositorioMock.delete(usuario.id)) thenReturn Future(usuario.id)
 
       eliminarUsuarioService
         .eliminar(usuario.id) must equal(Success(usuario))
@@ -37,7 +38,7 @@ class EliminarUsuarioServiceTest extends PlaySpec with MockitoSugar {
       val eliminarUsuarioService = new EliminarUsuarioService(repositorioMock)
 
 
-      when(repositorioMock.getById(usuario.id)) thenReturn None
+      when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
 
       eliminarUsuarioService
         .eliminar(usuario.id) must equal(Failure(NoExisteException()))

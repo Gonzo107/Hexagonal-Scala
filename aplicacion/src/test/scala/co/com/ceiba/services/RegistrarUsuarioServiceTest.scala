@@ -5,11 +5,12 @@ import co.com.ceiba.usuario.UsuarioRepository
 import co.com.ceiba.utils.UsuarioTestProvider
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play._
+import org.scalatest.{AsyncWordSpec, MustMatchers}
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class RegistarUsuarioServiceTest extends PlaySpec with MockitoSugar {
+class RegistrarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
 
   "RegistarUsuarioService" should {
@@ -19,12 +20,12 @@ class RegistarUsuarioServiceTest extends PlaySpec with MockitoSugar {
 
       val repositorioMock = mock[UsuarioRepository]
 
-      val registarUsuarioService = new RegistarUsuarioService(repositorioMock)
+      val registarUsuarioService = new RegistrarUsuarioService(repositorioMock)
 
 
-      when(repositorioMock.getById(usuario.id)) thenReturn None
+      when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
 
-      when(repositorioMock.save(usuario)) thenReturn Success(usuario)
+      when(repositorioMock.save(usuario)) thenReturn Future(usuario)
 
       registarUsuarioService
         .registrar(
@@ -39,10 +40,10 @@ class RegistarUsuarioServiceTest extends PlaySpec with MockitoSugar {
 
       val repositorioMock = mock[UsuarioRepository]
 
-      val registarUsuarioService = new RegistarUsuarioService(repositorioMock)
+      val registarUsuarioService = new RegistrarUsuarioService(repositorioMock)
 
 
-      when(repositorioMock.getById(usuario.id)) thenReturn Some(usuario)
+      when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
 
       registarUsuarioService
         .registrar(
