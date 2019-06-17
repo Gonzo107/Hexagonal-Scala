@@ -2,11 +2,11 @@ package co.com.ceiba.commands
 
 import co.com.ceiba.events.{Event, ExitoUsuarioEvent, FalloEvent, UsuarioEliminadoEvent}
 import co.com.ceiba.services.{EliminarUsuarioUseCase, RegistrarUsuarioUseCase}
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
+@Singleton
 class CommandHandler @Inject()(registrarUsuarioUseCase: RegistrarUsuarioUseCase, eliminarUsuarioUseCase: EliminarUsuarioUseCase)
                               (implicit ec: ExecutionContext) {
 

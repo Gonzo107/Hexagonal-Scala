@@ -20,12 +20,12 @@ class UsuarioRepositoryAdapter @Inject()
 
   override def getAll(): Future[Seq[Usuario]] = db.run(Usuarios.result)
 
-  override def getById(id: IdUsuario): Future[Usuario] = db.run(Usuarios.filter(_.id == id).take(1).result.head)
+  override def getById(id: IdUsuario): Future[Usuario] = db.run(Usuarios.filter(_.id === id).take(1).result.head)
 
 
-  override def delete(id: IdUsuario): Future[IdUsuario] = db.run(Usuarios.filter(_.id == id).delete).map(_ => id)
+  override def delete(id: IdUsuario): Future[IdUsuario] = db.run(Usuarios.filter(_.id === id).delete).map(_ => id)
 
-  override def exists(id: IdUsuario): Future[Boolean] = db.run(Usuarios.filter(_.id == id).exists.result)
+  override def exists(id: IdUsuario): Future[Boolean] = db.run(Usuarios.filter(_.id === id).exists.result)
 
   private class UserTable(tag: Tag) extends Table[Usuario](tag, "USERS") {
 

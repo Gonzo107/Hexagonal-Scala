@@ -71,5 +71,11 @@ lazy val persistenciaH2 = Project(
 lazy val apiRest = Project(
   id = "api-rest",
   base = file("infraestructura/driver/api-rest"))
-  .enablePlugins(PlayService)
+  .enablePlugins(PlayScala)
+  .settings(
+    scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala",
+    scalaSource in Test := baseDirectory.value / "src" / "test" / "scala",
+    resourceDirectory in Compile := baseDirectory.value / "src" / "main" / "resources",
+    resourceDirectory in Test := baseDirectory.value / "src" / "test" / "resources"
+  )
   .dependsOn(aplicacion)

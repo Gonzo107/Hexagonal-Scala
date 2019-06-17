@@ -10,7 +10,7 @@ import org.scalatest.{AsyncWordSpec, MustMatchers}
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class RegistarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
+class RegistrarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
 
   "RegistarUsuarioService" should {
@@ -20,7 +20,7 @@ class RegistarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with Mo
 
       val repositorioMock = mock[UsuarioRepository]
 
-      val registarUsuarioService = new RegistarUsuarioService(repositorioMock)
+      val registarUsuarioService = new RegistrarUsuarioService(repositorioMock)
 
 
       when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
@@ -40,7 +40,7 @@ class RegistarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with Mo
 
       val repositorioMock = mock[UsuarioRepository]
 
-      val registarUsuarioService = new RegistarUsuarioService(repositorioMock)
+      val registarUsuarioService = new RegistrarUsuarioService(repositorioMock)
 
 
       when(repositorioMock.exists(usuario.id)) thenReturn Future(false)

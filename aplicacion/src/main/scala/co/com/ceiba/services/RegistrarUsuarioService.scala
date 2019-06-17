@@ -7,7 +7,7 @@ import com.google.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistarUsuarioService @Inject()(usuarios: UsuarioRepository)(implicit ec: ExecutionContext) extends RegistrarUsuarioUseCase {
+class RegistrarUsuarioService @Inject()(usuarios: UsuarioRepository)(implicit ec: ExecutionContext) extends RegistrarUsuarioUseCase {
 
   override def registrar(id: Usuario.IdUsuario, nombre: String, apellido: String, email: String): Future[Usuario] = {
 

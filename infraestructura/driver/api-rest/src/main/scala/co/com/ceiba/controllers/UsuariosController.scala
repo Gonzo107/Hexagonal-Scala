@@ -11,6 +11,7 @@ import play.api.mvc.{AbstractController, ControllerComponents, PlayBodyParsers}
 
 import scala.concurrent.ExecutionContext
 
+@Singleton
 class UsuariosController @Inject()
 (cc: ControllerComponents,
  commandHandler: CommandHandler,
