@@ -8,7 +8,6 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{AsyncWordSpec, MustMatchers}
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 class RegistrarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
@@ -32,7 +31,7 @@ class RegistrarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
           usuario.id,
           usuario.nombre,
           usuario.apellido,
-          usuario.email) must equal(Success(usuario))
+          usuario.email).map(_ must equal(usuario))
     }
 
     "Fallar si el usuario ya existe" in {
@@ -43,14 +42,17 @@ class RegistrarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
       val registarUsuarioService = new RegistrarUsuarioService(repositorioMock)
 
 
-      when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
+      when(repositorioMock.exists(usuario.id)) thenReturn Future(true)
 
       registarUsuarioService
         .registrar(
           usuario.id,
           usuario.nombre,
           usuario.apellido,
-          usuario.email) must equal(Failure(YaExisteException()))
+          usuario.email).map(_ => fail())
+        .recover({
+          case YaExisteException(e) => e must equal("Ya existe un usuario con el id ingresado")
+        })
     }
 
   }

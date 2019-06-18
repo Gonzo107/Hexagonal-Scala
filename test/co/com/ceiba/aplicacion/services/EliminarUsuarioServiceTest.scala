@@ -8,7 +8,6 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{AsyncWordSpec, MustMatchers}
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 class EliminarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
@@ -27,7 +26,7 @@ class EliminarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with Mo
       when(repositorioMock.delete(usuario.id)) thenReturn Future(usuario.id)
 
       eliminarUsuarioService
-        .eliminar(usuario.id) must equal(Success(usuario))
+        .eliminar(usuario.id).map(idCreado => idCreado must equal(usuario.id))
     }
 
     "Fallar si el usuario no existe" in {
@@ -41,7 +40,7 @@ class EliminarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with Mo
       when(repositorioMock.exists(usuario.id)) thenReturn Future(false)
 
       eliminarUsuarioService
-        .eliminar(usuario.id) must equal(Failure(NoExisteException()))
+        .eliminar(usuario.id).map(_=>fail).recover({ case NoExisteException(e) => e must equal("No se puede eliminar un usuario no existente") })
     }
 
   }

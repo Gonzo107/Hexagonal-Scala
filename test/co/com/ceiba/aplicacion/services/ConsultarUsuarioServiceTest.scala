@@ -24,7 +24,7 @@ class ConsultarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
 
       when(repositorioMock.getAll()) thenReturn Future(usuarios)
 
-      consultarUsuariosService.consultarTodos() must equal(usuarios)
+      consultarUsuariosService.consultarTodos().map(_ must equal(usuarios))
     }
 
     "consultar por Id correctamente" in {
@@ -37,7 +37,7 @@ class ConsultarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
 
       when(repositorioMock.getById(usuario.id)) thenReturn Future(usuario)
 
-      consultarUsuariosService.consultarPorId(usuario.id) must equal(Some(usuario))
+      consultarUsuariosService.consultarPorId(usuario.id).map(_ must equal(usuario))
 
     }
 

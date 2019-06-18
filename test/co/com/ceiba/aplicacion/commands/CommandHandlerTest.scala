@@ -54,7 +54,7 @@ class CommandHandlerTest extends AsyncWordSpec with MustMatchers with MockitoSug
       manejador
         .manejarComando(
           ComandoTest()
-        ).map(event => event must equal(FalloEvent(manejador.COMANDO_NO_SOPORTADO)))
+        ).map(event => event must equal(FalloEvent(CommandHandler.COMANDO_NO_SOPORTADO)))
 
     }
 

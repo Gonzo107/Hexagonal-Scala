@@ -10,7 +10,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class CommandHandler @Inject()(registrarUsuarioUseCase: RegistrarUsuarioUseCase, eliminarUsuarioUseCase: EliminarUsuarioUseCase)
                               (implicit ec: ExecutionContext) {
 
-  val COMANDO_NO_SOPORTADO = "Operacion no soportada"
 
   def manejarComando(comando: Command): Future[Event] = {
 
@@ -20,10 +19,14 @@ class CommandHandler @Inject()(registrarUsuarioUseCase: RegistrarUsuarioUseCase,
 
       case EliminarUsuarioCommand(id) => eliminarUsuarioUseCase.eliminar(id).map(UsuarioEliminadoEvent)
 
-      case _ => Future(FalloEvent(COMANDO_NO_SOPORTADO))
+      case _ => Future(FalloEvent(CommandHandler.COMANDO_NO_SOPORTADO))
     }).recover({
       case error => FalloEvent(error.getLocalizedMessage)
     })
   }
 
+}
+
+object CommandHandler {
+  val COMANDO_NO_SOPORTADO = "Operacion no soportada"
 }
