@@ -1,7 +1,7 @@
 package co.com.ceiba.integracion
 
-import co.com.ceiba.dominio.usuario.{Usuario, UsuarioRepository}
-import co.com.ceiba.dominio.utils.UsuarioTestProvider
+import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
+import co.com.ceiba.domain.utils.UsuarioTestProvider
 import co.com.ceiba.infraestructura.driver.api_rest.formats.UsuarioFormat
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec

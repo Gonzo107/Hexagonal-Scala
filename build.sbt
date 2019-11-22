@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "4.0.2",
   "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
   "com.h2database" % "h2" % "1.4.192",
+  "org.typelevel" %% "cats-core" % "2.0.0"
 )
 
 lazy val root = (project in file("."))

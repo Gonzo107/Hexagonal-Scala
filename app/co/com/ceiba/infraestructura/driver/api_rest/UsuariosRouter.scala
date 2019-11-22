@@ -14,14 +14,14 @@ class UsuariosRouter @Inject()(controller: UsuariosController) extends SimpleRou
     case GET(p"/") =>
       controller.getAll
 
-    case GET(p"/$id") =>
-      controller.getById(id)
-
-    case POST(p"/") =>
-      controller.create
-
-    case DELETE(p"/$id") =>
-      controller.delete(id)
+//    case GET(p"/$id") =>
+//      controller.getById(id)
+//
+//    case POST(p"/") =>
+//      controller.create
+//
+//    case DELETE(p"/$id") =>
+//      controller.delete(id)
 
   }
 

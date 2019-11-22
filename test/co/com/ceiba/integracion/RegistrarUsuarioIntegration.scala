@@ -1,10 +1,10 @@
 package co.com.ceiba.integracion
 
-import co.com.ceiba.aplicacion.commands.RegistrarUsuarioCommand
-import co.com.ceiba.aplicacion.services.RegistrarUsuarioService
-import co.com.ceiba.dominio.usuario.{Usuario, UsuarioRepository}
-import co.com.ceiba.dominio.utils.UsuarioTestProvider
-import co.com.ceiba.infraestructura.driver.api_rest.formats.{CommandFormats, UsuarioFormat}
+import co.com.ceiba.aplication.commands.RegistrarUsuarioCommand
+import co.com.ceiba.aplication.services.RegistrarUsuarioService
+import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
+import co.com.ceiba.domain.utils.UsuarioTestProvider
+import co.com.ceiba.infraestructura.driver.api_rest.formats.UsuarioFormat
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec

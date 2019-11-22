@@ -1,12 +1,18 @@
 package co.com.ceiba.infraestructura.driven.persistencia_h2.usuario
 
-import co.com.ceiba.dominio.usuario.Usuario.IdUsuario
-import co.com.ceiba.dominio.usuario.{Usuario, UsuarioRepository}
+
+import cats.data.EitherT
+import co.com.ceiba.domain.exception.DomainError
+import co.com.ceiba.domain.usuario.Usuario.IdUsuario
+import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
 import javax.inject.Inject
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
+import cats.implicits._
+import co.com.ceiba.domain.execution.ExecutionDomain.Result
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class UsuarioRepositoryAdapter @Inject()
 (protected val dbConfigProvider: DatabaseConfigProvider)
@@ -17,9 +23,17 @@ class UsuarioRepositoryAdapter @Inject()
 
   private val Usuarios = TableQuery[UserTable]
 
-  override def save(usuario: Usuario): Future[Usuario] = db.run(Usuarios += usuario).map(_ => usuario)
+  override def save(usuario: Usuario): Result[Usuario] = EitherT {
+    db.run(Usuarios += usuario).map({
+      case 0 => DomainError.notPerformed().asLeft
+      case _ => usuario.asRight
+    })
+  }
 
-  override def getAll(): Future[Seq[Usuario]] = db.run(Usuarios.result)
+
+  override def getAll(): Result[Seq[Usuario]] = EitherT {
+    db.run(Usuarios.result).map(usuario => usuario.asRight).recover(exception => DomainError.notPerformed().asLeft)
+  }
 
   override def getById(id: IdUsuario): Future[Usuario] = db.run(Usuarios.filter(_.id === id).take(1).result.head)
 
