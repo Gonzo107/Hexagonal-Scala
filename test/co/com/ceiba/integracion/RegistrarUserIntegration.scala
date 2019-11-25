@@ -2,9 +2,9 @@ package co.com.ceiba.integracion
 
 import co.com.ceiba.aplication.commands.RegistrarUsuarioCommand
 import co.com.ceiba.aplication.services.RegistrarUsuarioService
-import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
+import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UsuarioTestProvider
-import co.com.ceiba.infraestructura.driver.api_rest.formats.UsuarioFormat
+import co.com.ceiba.infrastructure.driver.api_rest.formats.UsuarioFormat
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
@@ -14,7 +14,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json.toJson
 import play.api.libs.ws.WSClient
 
-class RegistrarUsuarioIntegration extends PlaySpec
+class RegistrarUserIntegration extends PlaySpec
   with GuiceOneServerPerSuite
   with ScalaFutures
   with IntegrationPatience
@@ -22,10 +22,10 @@ class RegistrarUsuarioIntegration extends PlaySpec
   with CommandFormats
   with BeforeAndAfter {
 
-  val usuario: Usuario = UsuarioTestProvider.unUsuario()
+  val usuario: User = UsuarioTestProvider.unUsuario()
 
   before {
-    val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+    val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
     if (usuarios.exists(usuario.id).futureValue) {
       usuarios.delete(usuario.id)
@@ -33,7 +33,7 @@ class RegistrarUsuarioIntegration extends PlaySpec
   }
 
   after {
-    val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+    val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
     if (usuarios.exists(usuario.id).futureValue) {
       usuarios.delete(usuario.id)
@@ -43,16 +43,16 @@ class RegistrarUsuarioIntegration extends PlaySpec
   "Aplicacion" should {
     "Responder el usuario creado al enviar un RegistrarUsuarioCommand a /usuarios por post" in {
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
-      val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+      val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
       val usuario = UsuarioTestProvider.unUsuario()
 
-      val body = RegistrarUsuarioCommand(usuario.id, usuario.nombre, usuario.apellido, usuario.email)
+      val body = RegistrarUsuarioCommand(usuario.id, usuario.name, usuario.surname, usuario.email)
       val peticion = wsUrl("/usuarios").post(toJson(body))
 
       peticion.futureValue.status must equal(Status.CREATED)
 
-      val respuesta = peticion.futureValue.body[JsValue].as[Usuario]
+      val respuesta = peticion.futureValue.body[JsValue].as[User]
 
       respuesta must equal(usuario)
 
@@ -62,13 +62,13 @@ class RegistrarUsuarioIntegration extends PlaySpec
 
 
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
-      val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+      val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
       val usuario = UsuarioTestProvider.unUsuario()
 
       usuarios.save(usuario)
 
-      val body = RegistrarUsuarioCommand(usuario.id, usuario.nombre, usuario.apellido, usuario.apellido)
+      val body = RegistrarUsuarioCommand(usuario.id, usuario.name, usuario.surname, usuario.surname)
 
       val peticion = wsUrl("/usuarios").post(toJson(body))
       peticion.futureValue.status must equal(Status.BAD_REQUEST)

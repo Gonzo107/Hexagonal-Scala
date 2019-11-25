@@ -1,6 +1,6 @@
 package co.com.ceiba.aplication.services
 
-import co.com.ceiba.domain.usuario.UsuarioRepository
+import co.com.ceiba.domain.user.UserRepository
 import co.com.ceiba.domain.utils.UsuarioTestProvider
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
@@ -8,7 +8,7 @@ import org.scalatest.{AsyncWordSpec, MustMatchers}
 
 import scala.concurrent.Future
 
-class ConsultarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
+class ConsultarUserServiceTest extends AsyncWordSpec with MustMatchers with MockitoSugar {
 
   "ConsultarUsuarioService" should {
 
@@ -18,7 +18,7 @@ class ConsultarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
 
       val usuarios = Seq(usuario, usuario, usuario)
 
-      val repositorioMock = mock[UsuarioRepository]
+      val repositorioMock = mock[UserRepository]
 
       val consultarUsuariosService = new ConsultarUsuarioService(repositorioMock)
 
@@ -31,7 +31,7 @@ class ConsultarUsuarioServiceTest extends AsyncWordSpec with MustMatchers with M
 
       val usuario = UsuarioTestProvider.unUsuario()
 
-      val repositorioMock = mock[UsuarioRepository]
+      val repositorioMock = mock[UserRepository]
 
       val consultarUsuariosService = new ConsultarUsuarioService(repositorioMock)
 

@@ -1,8 +1,8 @@
 package co.com.ceiba.integracion
 
-import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
+import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UsuarioTestProvider
-import co.com.ceiba.infraestructura.driver.api_rest.formats.UsuarioFormat
+import co.com.ceiba.infrastructure.driver.api_rest.formats.UsuarioFormat
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -21,7 +21,7 @@ class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite 
 
       peticion.futureValue.status must equal(Status.OK)
 
-      val respuesta = peticion.futureValue.body[JsValue].as[Seq[Usuario]]
+      val respuesta = peticion.futureValue.body[JsValue].as[Seq[User]]
 
       respuesta must equal(Seq())
 
@@ -38,7 +38,7 @@ class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite 
 
     "Responder la lista de usuarios al llamar el endpoint /usuarios con GET cuando hay usuarios" in {
 
-      val usuarios = app.injector.instanceOf(classOf[UsuarioRepository])
+      val usuarios = app.injector.instanceOf(classOf[UserRepository])
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
 
       val usuarioTest = UsuarioTestProvider.unUsuario()
@@ -49,7 +49,7 @@ class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite 
 
       peticion.futureValue.status must equal(Status.OK)
 
-      val respuesta = peticion.futureValue.body[JsValue].as[Seq[Usuario]]
+      val respuesta = peticion.futureValue.body[JsValue].as[Seq[User]]
 
       respuesta must equal(Seq(usuarioTest))
 
@@ -57,7 +57,7 @@ class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite 
 
     "Responder el usuario al llamar el endpoint /usuarios/:id con GET cuando hay usuarios" in {
 
-      val usuarios = app.injector.instanceOf(classOf[UsuarioRepository])
+      val usuarios = app.injector.instanceOf(classOf[UserRepository])
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
 
       val usuarioTest = UsuarioTestProvider.unUsuario()
@@ -68,7 +68,7 @@ class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite 
 
       peticion.futureValue.status must equal(Status.OK)
 
-      val respuesta = peticion.futureValue.body[JsValue].as[Usuario]
+      val respuesta = peticion.futureValue.body[JsValue].as[User]
 
       respuesta must equal(usuarioTest)
 

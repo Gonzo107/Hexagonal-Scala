@@ -1,6 +1,6 @@
-package co.com.ceiba.infraestructura.driver.api_rest
+package co.com.ceiba.infrastructure.driver.api_rest
 
-import co.com.ceiba.infraestructura.driver.api_rest.controllers.UsuariosController
+import co.com.ceiba.infrastructure.driver.api_rest.controllers.UsuariosController
 import javax.inject.Inject
 import play.api.routing.Router.Routes
 import play.api.routing.SimpleRouter

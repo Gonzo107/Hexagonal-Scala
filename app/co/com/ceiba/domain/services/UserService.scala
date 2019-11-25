@@ -1,16 +1,16 @@
 package co.com.ceiba.domain.services
 
 import co.com.ceiba.domain.execution.ExecutionDomain.Result
-import co.com.ceiba.domain.usuario.Usuario
+import co.com.ceiba.domain.user.User
 
 trait UserService {
 
-  def delete(id: Usuario.IdUsuario): Result[Usuario.IdUsuario]
+  def delete(id: User.IdUser): Result[User.IdUser]
 
-  def all(): Result[Seq[Usuario]]
+  def all(): Result[Seq[User]]
 
-  def byId(id: Usuario.IdUsuario): Result[Usuario]
+  def byId(id: User.IdUser): Result[User]
 
-  def create(id: Usuario.IdUsuario, nombre: String, apellido: String, email: String): Result[Usuario]
+  def create(id: User.IdUser, nombre: String, apellido: String, email: String): Result[User]
 
 }

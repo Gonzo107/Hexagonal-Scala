@@ -1,9 +1,9 @@
 package co.com.ceiba.integracion
 
 import co.com.ceiba.aplication.services.EliminarUsuarioService
-import co.com.ceiba.domain.usuario.{Usuario, UsuarioRepository}
+import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UsuarioTestProvider
-import co.com.ceiba.infraestructura.driver.api_rest.formats.UsuarioFormat
+import co.com.ceiba.infrastructure.driver.api_rest.formats.UsuarioFormat
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
@@ -11,7 +11,7 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.Status
 import play.api.libs.ws.WSClient
 
-class EliminarUsuarioIntegration extends PlaySpec
+class EliminarUserIntegration extends PlaySpec
   with GuiceOneServerPerSuite
   with ScalaFutures
   with IntegrationPatience
@@ -19,10 +19,10 @@ class EliminarUsuarioIntegration extends PlaySpec
   with CommandFormats
   with BeforeAndAfter {
 
-  val usuario: Usuario = UsuarioTestProvider.unUsuario()
+  val usuario: User = UsuarioTestProvider.unUsuario()
 
   before {
-    val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+    val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
     if (usuarios.exists(usuario.id).futureValue) {
       usuarios.delete(usuario.id)
@@ -30,7 +30,7 @@ class EliminarUsuarioIntegration extends PlaySpec
   }
 
   after {
-    val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+    val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
     if (usuarios.exists(usuario.id).futureValue) {
       usuarios.delete(usuario.id)
@@ -56,7 +56,7 @@ class EliminarUsuarioIntegration extends PlaySpec
 
     "Responder el id del usuario eliminado al enviar un id de usuario existente a /usuarios/:Id por DELETE " in {
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
-      val usuarios: UsuarioRepository = app.injector.instanceOf(classOf[UsuarioRepository])
+      val usuarios: UserRepository = app.injector.instanceOf(classOf[UserRepository])
 
       val usuario = UsuarioTestProvider.unUsuario()
 
