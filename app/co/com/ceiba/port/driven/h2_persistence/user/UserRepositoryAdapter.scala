@@ -1,4 +1,4 @@
-package co.com.ceiba.infrastructure.driven.h2_persistence.user
+package co.com.ceiba.port.driven.h2_persistence.user
 
 
 import cats.data.EitherT

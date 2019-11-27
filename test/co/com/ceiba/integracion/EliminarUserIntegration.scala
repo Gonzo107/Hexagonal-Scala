@@ -3,7 +3,7 @@ package co.com.ceiba.integracion
 import co.com.ceiba.aplication.services.EliminarUsuarioService
 import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UsuarioTestProvider
-import co.com.ceiba.infrastructure.driver.api_rest.formats.UsuarioFormat
+import co.com.ceiba.port.driver.api_rest.formats.UserFormats
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
@@ -15,7 +15,7 @@ class EliminarUserIntegration extends PlaySpec
   with GuiceOneServerPerSuite
   with ScalaFutures
   with IntegrationPatience
-  with UsuarioFormat
+  with UserFormats
   with CommandFormats
   with BeforeAndAfter {
 

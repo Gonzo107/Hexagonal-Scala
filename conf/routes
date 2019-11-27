@@ -1,1 +1,1 @@
-->      /usuarios                       co.com.ceiba.infrastructure.driver.api_rest.UsuariosRouter
+->      /users        co.com.ceiba.port.driver.api_rest.UsersRouter

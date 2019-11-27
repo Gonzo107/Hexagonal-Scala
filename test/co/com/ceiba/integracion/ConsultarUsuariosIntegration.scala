@@ -2,7 +2,7 @@ package co.com.ceiba.integracion
 
 import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UsuarioTestProvider
-import co.com.ceiba.infrastructure.driver.api_rest.formats.UsuarioFormat
+import co.com.ceiba.port.driver.api_rest.formats.UserFormats
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -11,13 +11,15 @@ import play.api.libs.json.JsValue
 import play.api.libs.ws.WSClient
 
 
-class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with IntegrationPatience with UsuarioFormat {
+class ConsultarUsuariosIntegration extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with IntegrationPatience with UserFormats {
 
 
   "Aplicacion" should {
-    "Responder vacio al llamar el endpoint /usuarios con GET cuando no hay usuarios" in {
+    "Responder vacio al llamar el endpoint /usuarios con GET cuando no hay usuarios" in new App(applicationWithRouter) {
       implicit val ws: WSClient = app.injector.instanceOf(classOf[WSClient])
-      val peticion = wsUrl("/usuarios").get
+
+      val peticion = wsUrl("/users").get
+
 
       peticion.futureValue.status must equal(Status.OK)
 

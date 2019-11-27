@@ -7,7 +7,7 @@ import co.com.ceiba.domain.exception.DomainError
 import co.com.ceiba.domain.execution.ExecutionDomain.Result
 import co.com.ceiba.domain.services.UserService
 import co.com.ceiba.domain.user.User.IdUser
-import co.com.ceiba.domain.user.{User, UserRepository}
+import co.com.ceiba.domain.user.{User, UserRepository, UserSeed}
 import com.google.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,11 +31,11 @@ class UserServiceImpl @Inject()(usuarios: UserRepository)(implicit ec: Execution
 
   override def byId(id: IdUser): Result[User] = usuarios.getById(id)
 
-  override def create(id: IdUser, name: String, surname: String, email: String): Result[User] = {
+  override def create(seed: UserSeed): Result[User] = {
     for {
-      exists <- usuarios.exists(id)
+      exists <- usuarios.exists(seed.id)
       deleted <- if (!exists) {
-        val user = UserFactory.create(id, name, surname, email)
+        val user = UserFactory.from(seed)
         usuarios.save(user)
       } else {
         EitherT.leftT[Future, User](DomainError.exists())

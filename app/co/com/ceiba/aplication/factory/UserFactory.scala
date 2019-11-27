@@ -1,10 +1,9 @@
 package co.com.ceiba.aplication.factory
 
-import co.com.ceiba.domain.user.User
-import co.com.ceiba.domain.user.User.IdUser
+import co.com.ceiba.domain.user.{User, UserSeed}
 
 object UserFactory {
 
-  def create(id: IdUser, name: String, surname: String, email: String): User =
-    User(id, name, surname, email)
+  def from(seed: UserSeed): User =
+    User(seed.id, seed.name, seed.surname, seed.email)
 }

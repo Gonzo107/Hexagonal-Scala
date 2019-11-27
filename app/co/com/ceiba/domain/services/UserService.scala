@@ -1,7 +1,7 @@
 package co.com.ceiba.domain.services
 
 import co.com.ceiba.domain.execution.ExecutionDomain.Result
-import co.com.ceiba.domain.user.User
+import co.com.ceiba.domain.user.{User, UserSeed}
 
 trait UserService {
 
@@ -11,6 +11,6 @@ trait UserService {
 
   def byId(id: User.IdUser): Result[User]
 
-  def create(id: User.IdUser, nombre: String, apellido: String, email: String): Result[User]
+  def create(seed: UserSeed): Result[User]
 
 }

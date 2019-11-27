@@ -1,7 +1,7 @@
 import co.com.ceiba.aplication.services.UserServiceImpl
 import co.com.ceiba.domain.services.UserService
 import co.com.ceiba.domain.user.UserRepository
-import co.com.ceiba.infrastructure.driven.h2_persistence.user.UserRepositoryAdapter
+import co.com.ceiba.port.driven.h2_persistence.user.UserRepositoryAdapter
 import com.google.inject.AbstractModule
 import play.api.{Configuration, Environment}
 
