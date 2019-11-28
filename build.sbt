@@ -8,8 +8,8 @@ name := "Hexagonal-Scala"
 
 libraryDependencies ++= Seq(
   guice,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test,
-  "org.mockito" % "mockito-core" % "2.28.2" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % "it,Test",
+  "org.mockito" % "mockito-core" % "2.28.2" % "it,Test",
   "com.typesafe.play" %% "play-slick" % "4.0.2",
   "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
   "com.h2database" % "h2" % "1.4.192",
@@ -18,4 +18,7 @@ libraryDependencies ++= Seq(
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
+  .configs(IntegrationTest)
+  .settings(Defaults.itSettings)
 
+scalaSource in IntegrationTest := baseDirectory.value / "/it"
