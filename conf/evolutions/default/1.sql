@@ -1,4 +1,4 @@
-# COFFEE schema
+# CEIBA schema
 
 # --- !Ups
 
@@ -12,4 +12,4 @@ CREATE TABLE USERS(
 
 # --- !Downs
 
-DROP TABLE COFFEE;
+DROP TABLE USERS;
