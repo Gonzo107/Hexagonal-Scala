@@ -2,10 +2,9 @@ package co.com.ceiba.user
 
 import cats.data.EitherT
 import cats.implicits._
-import co.com.ceiba.domain.execution.ExecutionDomain.Result
-import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UserTestProvider
-import co.com.ceiba.port.driver.api_rest.formats.UserFormats
+import co.com.ceiba.driver.api_rest.formats.UserFormats
+import co.com.ceiba.execution.ExecutionDomain.Result
 import org.mockito.Mockito.when
 import org.scalatest.{AsyncTestSuite, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar

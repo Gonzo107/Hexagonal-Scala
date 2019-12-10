@@ -2,13 +2,14 @@ package co.com.ceiba.aplication.services
 
 import cats.data.EitherT
 import cats.implicits._
-import co.com.ceiba.domain.exception.DomainError.AlreadyExists
-import co.com.ceiba.domain.execution.ExecutionDomain.Result
-import co.com.ceiba.domain.user.{User, UserRepository}
 import co.com.ceiba.domain.utils.UserTestProvider
-import org.mockito.Mockito._
-import org.scalatest._
+import co.com.ceiba.exception.DomainError.AlreadyExists
+import co.com.ceiba.execution.ExecutionDomain.Result
+import co.com.ceiba.services.UserServiceImpl
+import co.com.ceiba.user.{User, UserRepository}
+import org.scalatest.{AsyncWordSpec, BeforeAndAfter, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.{reset, when}
 
 import scala.concurrent.Future
 

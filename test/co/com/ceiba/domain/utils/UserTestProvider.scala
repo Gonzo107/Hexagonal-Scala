@@ -1,6 +1,6 @@
 package co.com.ceiba.domain.utils
 
-import co.com.ceiba.domain.user.{User, UserSeed}
+import co.com.ceiba.user.{User, UserSeed}
 
 object UserTestProvider {
 
